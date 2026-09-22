@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Crestview_Urgent_Case_Alert</fullName>
+        <description>Sends an urgent-priority alert email to the queue that owns this case when a new intake is submitted with Urgent priority. Referenced by Case_AfterCreate_RouteAndAlert flow. IPOP-9/18.</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Crestview/Crestview_Urgent_Case_Alert</template>
+    </alerts>
+    <alerts>
+        <fullName>Crestview_Case_ReRoute_Notification</fullName>
+        <description>Notifies the new queue when a case is re-routed due to a Type change. Referenced by Case_AfterUpdate_ReRouteAndAlert flow. IPOP-6/9.</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>Crestview/Crestview_Case_ReRoute_Notification</template>
+    </alerts>
+</Workflow>

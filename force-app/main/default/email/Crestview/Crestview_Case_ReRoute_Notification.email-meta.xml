@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <available>true</available>
+    <description>Email template for case re-route notifications. Sent by Case_AfterUpdate_ReRouteAndAlert flow when a case type changes and the case is re-routed to a different queue. IPOP-6/9.</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Crestview Case Re-Route Notification</name>
+    <style>none</style>
+    <subject>Case Re-Routed to Your Queue — {!Case.CaseNumber}</subject>
+    <textOnly>A patient intake case has been re-routed to your queue.
+
+Case Number: {!Case.CaseNumber}
+Patient: {!Case.Contact.Name}
+Case Type: {!Case.Type}
+Priority: {!Case.Priority}
+Current Status: {!Case.Status}
+Description: {!Case.Description}
+
+Please log in to Salesforce to review and process this case.
+
+This is an automated message from the Crestview Community Health Patient Intake System. Do not reply to this email.</textOnly>
+    <type>text</type>
+</EmailTemplate>

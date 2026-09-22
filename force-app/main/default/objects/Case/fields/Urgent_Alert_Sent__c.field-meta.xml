@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Urgent_Alert_Sent__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates that an urgent-priority alert email has been dispatched to the queue supervisor for this case. Set by Case_AfterCreate_RouteAndAlert flow. IPOP-18.</description>
+    <label>Urgent Alert Sent</label>
+    <type>Checkbox</type>
+</CustomField>

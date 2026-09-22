@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <isLicensed>false</isLicensed>
+    <label>Block Post-Submit Edit</label>
+    <description>Grants the exception to the Status_Submitted_No_Edit validation rule. Absence of this permission blocks editing Submitted Cases. Origin: IPOP-4, ADR §3.5.</description>
+</CustomPermission>

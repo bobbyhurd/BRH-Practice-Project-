@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Permission Set Group for Medical Responder persona. Bundles Medical_Responder_PS. Assign to staff working the Medical Response queue. IPOP-7/8.</description>
+    <label>Medical Responder</label>
+    <masterLabel>Medical Responder</masterLabel>
+    <permissionSets>Medical_Responder_PS</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

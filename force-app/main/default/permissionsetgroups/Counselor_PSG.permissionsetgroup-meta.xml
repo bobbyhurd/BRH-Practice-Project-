@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Permission Set Group for Counselor persona. Bundles Counselor_PS. Assign to staff working the Counseling queue. IPOP-7/8.</description>
+    <label>Counselor</label>
+    <masterLabel>Counselor</masterLabel>
+    <permissionSets>Counselor_PS</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

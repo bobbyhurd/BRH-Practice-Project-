@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <description>RT – Case – Route and Alert. After-save record-triggered flow on Case (create only). When Priority equals Urgent, sends an email alert to the queue supervisor and sets Urgent_Alert_Sent__c to true. Fault path logs a CaseComment. IPOP-4/9/18.</description>
+    <environments>Default</environments>
+    <interviewLabel>Case After Create Route And Alert {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RT – Case – Route and Alert</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordTriggerType>Create</recordTriggerType>
+    <start>
+        <locationX>176</locationX>
+        <locationY>0</locationY>
+        <filterLogic>1</filterLogic>
+        <filters>
+            <field>Priority</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Urgent</stringValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <decisions>
+        <description>Checks whether this case is Urgent priority — entry criteria already filter this, so this is a safety check.</description>
+        <name>Is_Urgent_Priority</name>
+        <label>Is Urgent Priority?</label>
+        <locationX>176</locationX>
+        <locationY>120</locationY>
+        <defaultConnector>
+            <targetReference>End_Flow</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Urgent</defaultConnectorLabel>
+        <rules>
+            <name>Urgent_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Priority</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Urgent</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Urgent_Alert</targetReference>
+            </connector>
+            <label>Yes — Urgent</label>
+        </rules>
+    </decisions>
+    <actionCalls>
+        <description>Sends an email alert to the queue supervisor notifying them of an Urgent priority intake case. Uses the Crestview_Urgent_Alert email alert.</description>
+        <name>Send_Urgent_Alert</name>
+        <label>Send Urgent Alert Email</label>
+        <locationX>176</locationX>
+        <locationY>240</locationY>
+        <actionName>Case.Crestview_Urgent_Case_Alert</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Update_Urgent_Alert_Sent</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Log_Alert_Fault</targetReference>
+        </faultConnector>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <recordUpdates>
+        <description>Marks Urgent_Alert_Sent__c = true so the UI can show a visual indicator and reporting can track urgent cases. IPOP-18.</description>
+        <name>Update_Urgent_Alert_Sent</name>
+        <label>Set Urgent Alert Sent to True</label>
+        <locationX>176</locationX>
+        <locationY>360</locationY>
+        <connector>
+            <targetReference>End_Flow</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Log_Alert_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Urgent_Alert_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <recordCreates>
+        <description>Fault path: if the email alert or field update fails, log a CaseComment so staff are aware the alert was not sent.</description>
+        <name>Log_Alert_Fault</name>
+        <label>Log Alert Failure as Case Comment</label>
+        <locationX>352</locationX>
+        <locationY>360</locationY>
+        <faultConnector>
+            <targetReference>End_Flow</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CommentBody</field>
+            <value>
+                <stringValue>SYSTEM ALERT: Urgent case alert email failed to send. Please notify the queue supervisor manually. Flow fault: {!$Flow.FaultMessage}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IsPublished</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>CaseComment</object>
+    </recordCreates>
+    <noMoreValuesConnector>
+        <targetReference>End_Flow</targetReference>
+    </noMoreValuesConnector>
+    <variables>
+        <description>Termination node placeholder</description>
+        <name>End_Flow</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

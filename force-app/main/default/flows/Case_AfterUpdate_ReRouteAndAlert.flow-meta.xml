@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <description>RT – Case – Re-Route and Alert. After-save record-triggered flow on Case (update only). Entry criteria: Type field changed (compared to $Record__Prior.Type). Re-triggers assignment rules and sends a re-route notification. Also logs a success-path CaseComment documenting the re-route. Fault path logs a CaseComment. IPOP-6. Part-A item 2: success-path CaseComment added.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>True when the case Type has changed since the last save.</description>
+        <name>forB_TypeChanged</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT($Record.Type = $Record__Prior.Type)</expression>
+    </formulas>
+    <formulas>
+        <description>Builds the re-route comment body documenting the type change.</description>
+        <name>forT_ReRouteComment</name>
+        <dataType>String</dataType>
+        <expression>"SYSTEM: Case type changed from '" &amp; TEXT($Record__Prior.Type) &amp; "' to '" &amp; TEXT($Record.Type) &amp; "' on " &amp; TEXT(NOW()) &amp; ". Case re-routed to the appropriate queue via assignment rules."</expression>
+    </formulas>
+    <interviewLabel>Case After Update Re Route And Alert {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RT – Case – Re-Route and Alert</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordTriggerType>Update</recordTriggerType>
+    <start>
+        <locationX>176</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>false</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>1</filterLogic>
+        <filters>
+            <field>Type</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <recordCreates>
+        <description>Success path: logs a CaseComment documenting the type change and re-route. Part-A item 2 (IPOP-6).</description>
+        <name>Log_ReRoute_Success</name>
+        <label>Log Re-Route Success as Case Comment</label>
+        <locationX>176</locationX>
+        <locationY>120</locationY>
+        <connector>
+            <targetReference>Send_ReRoute_Notification</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Log_ReRoute_Fault</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CommentBody</field>
+            <value>
+                <elementReference>forT_ReRouteComment</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IsPublished</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>CaseComment</object>
+    </recordCreates>
+    <actionCalls>
+        <description>Sends an email notification to the new queue informing them of the re-routed case.</description>
+        <name>Send_ReRoute_Notification</name>
+        <label>Send Re-Route Notification Email</label>
+        <locationX>176</locationX>
+        <locationY>240</locationY>
+        <actionName>Case.Crestview_Case_ReRoute_Notification</actionName>
+        <actionType>emailAlert</actionType>
+        <faultConnector>
+            <targetReference>Log_ReRoute_Fault</targetReference>
+        </faultConnector>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <recordCreates>
+        <description>Fault path: if any step fails, log a CaseComment so staff are aware of the failure.</description>
+        <name>Log_ReRoute_Fault</name>
+        <label>Log Re-Route Failure as Case Comment</label>
+        <locationX>352</locationX>
+        <locationY>240</locationY>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CommentBody</field>
+            <value>
+                <stringValue>SYSTEM ALERT: Case re-route notification failed. Please check the case assignment manually. Flow fault: {!$Flow.FaultMessage}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IsPublished</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>CaseComment</object>
+    </recordCreates>
+</Flow>

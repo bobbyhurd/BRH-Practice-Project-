@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Draft_Owner__c</fullName>
+    <label>Draft Owner</label>
+    <type>Lookup</type>
+    <referenceTo>User</referenceTo>
+    <relationshipLabel>Draft Cases</relationshipLabel>
+    <relationshipName>Draft_Cases</relationshipName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <required>false</required>
+    <description>Captures the original creator when a draft Case is reassigned; supports audit trail. Origin: IPOP-10, Design 1.</description>
+    <inlineHelpText>Auto-populated when a draft Case is assigned to another Coordinator.</inlineHelpText>
+</CustomField>

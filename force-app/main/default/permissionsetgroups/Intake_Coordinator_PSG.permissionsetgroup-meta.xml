@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Permission Set Group for Intake Coordinator persona. Bundles Intake_Coordinator_PS. Assign to staff who create and manage patient intake cases. IPOP-7/8.</description>
+    <label>Intake Coordinator</label>
+    <masterLabel>Intake Coordinator</masterLabel>
+    <permissionSets>Intake_Coordinator_PS</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>
