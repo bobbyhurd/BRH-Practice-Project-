@@ -2,7 +2,7 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Status_Submitted_No_Edit</fullName>
     <active>true</active>
-    <description>Prevents editing of cases once they have been submitted to a queue. Uses the Block_PostSubmit_Edit custom permission (NOT a profile check) so that only roles explicitly granted that permission can edit submitted cases. IPOP-4. ADR note: corrected from original $Profile.Name formula per Part-A item 1.</description>
+    <description>Prevents editing submitted cases. Uses Block_PostSubmit_Edit custom permission. IPOP-4. Uses $Permission (not $Profile) per Part-A item 1.</description>
     <errorConditionFormula>AND(ISPICKVAL(Status, "Submitted"), $Permission.Block_PostSubmit_Edit)</errorConditionFormula>
     <errorMessage>Cases submitted to a queue cannot be edited. Please contact your supervisor if a correction is needed.</errorMessage>
 </ValidationRule>

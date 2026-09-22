@@ -3,7 +3,6 @@
     <description>DATA – Medical – Read/Create/Edit. Grants medical responders read-only on Contact (PHI), CRE on Case in Medical Response queue context, read/write on Status/Type/Notes, and Reports read. IPOP-7/8.</description>
     <label>Medical Responder PS</label>
     <hasActivationRequired>false</hasActivationRequired>
-    <userLicense>Salesforce</userLicense>
     <objectPermissions>
         <allowCreate>true</allowCreate>
         <allowDelete>false</allowDelete>
@@ -64,36 +63,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Case.Urgent_Alert_Sent__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Contact.FirstName</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Contact.LastName</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Contact.Birthdate</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Contact.Phone</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Contact.Email</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Contact.MobilePhone</field>
         <readable>true</readable>
     </fieldPermissions>
     <userPermissions>

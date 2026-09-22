@@ -1,0 +1,742 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+
+    <assignments>
+        <description>Captures the ID of the newly created Case record into varT_CaseId for use on the confirmation screen.</description>
+        <name>Set_Case_Id</name>
+        <label>Set Case ID</label>
+        <locationX>176</locationX>
+        <locationY>1100</locationY>
+        <assignmentItems>
+            <assignToReference>varT_CaseId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Create_Case</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_New_Case</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Captures the ID of the newly created Contact record into varT_ContactId for use in Case creation.</description>
+        <name>Set_New_Contact_Id</name>
+        <label>Set New Contact ID</label>
+        <locationX>352</locationX>
+        <locationY>620</locationY>
+        <assignmentItems>
+            <assignToReference>varT_ContactId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Create_New_Contact</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Screen_CaseDetails</targetReference>
+        </connector>
+    </assignments>
+
+    
+    <decisions>
+        <description>Routes to search results screen if patients found; routes to new patient creation if none found.</description>
+        <name>Decision_PatientFound</name>
+        <label>Was a Patient Found?</label>
+        <locationX>176</locationX>
+        <locationY>360</locationY>
+        <defaultConnector>
+            <targetReference>Screen_NewPatient</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Patient Found — Create New</defaultConnectorLabel>
+        <rules>
+            <name>Patient_Found_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varR_SearchResults</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_SelectPatient</targetReference>
+            </connector>
+            <label>Yes — Patient(s) Found</label>
+        </rules>
+    </decisions>
+
+    
+    <decisions>
+        <description>If an existing patient was selected (ContactId is not null), proceed to case creation; otherwise create a new Contact.</description>
+        <name>Decision_UseExistingOrNew</name>
+        <label>Use Existing Patient or Create New?</label>
+        <locationX>0</locationX>
+        <locationY>600</locationY>
+        <defaultConnector>
+            <targetReference>Screen_NewPatient</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Create New Patient</defaultConnectorLabel>
+        <rules>
+            <name>Use_Existing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varT_ContactId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_CaseDetails</targetReference>
+            </connector>
+            <label>Use Existing Patient</label>
+        </rules>
+    </decisions>
+
+    
+    <description>SF – Contact Screen – Patient Search. Screen flow for the Crestview patient intake process. Guides intake coordinators through 5 steps: (1) patient search by name/phone/DOB, (2) create or update Contact record, (3) create Case with Status=Draft, (4) Save Draft or Submit, (5) confirmation. IPOP-3/4/10. ADR-006: Save Draft = explicit button that saves with Status=Draft; Submit = button that sets Status=Submitted and triggers assignment.</description>
+    <dynamicChoiceSets>
+        <description>Picklist choices for Case.Type standard picklist.</description>
+        <name>picChoice_CaseType</name>
+        <dataType>Picklist</dataType>
+        <displayField>label</displayField>
+        <object>Case</object>
+        <picklistField>Type</picklistField>
+        <valueField>value</valueField>
+    </dynamicChoiceSets>
+
+    <dynamicChoiceSets>
+        <description>Picklist choices for Case.Priority standard picklist.</description>
+        <name>picChoice_CasePriority</name>
+        <dataType>Picklist</dataType>
+        <displayField>label</displayField>
+        <object>Case</object>
+        <picklistField>Priority</picklistField>
+        <valueField>value</valueField>
+    </dynamicChoiceSets>
+
+    
+    <environments>Default</environments>
+    <formulas>
+        <description>Returns "Submitted" if the coordinator clicked Submit, otherwise "Draft".</description>
+        <name>forT_CaseStatus</name>
+        <dataType>String</dataType>
+        <expression>IF({!varT_ActionChoice} = "Submit", "Submitted", "Draft")</expression>
+    </formulas>
+
+    
+    <interviewLabel>Contact Screen Patient Search {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SF – Contact Screen – Patient Search</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+
+    
+    <recordCreates>
+        <description>Creates the new patient Contact record with Is_Patient__c = true. Fault path routes to the fault screen.</description>
+        <name>Create_New_Contact</name>
+        <label>Create New Patient Contact</label>
+        <locationX>352</locationX>
+        <locationY>600</locationY>
+        <connector>
+            <targetReference>Set_New_Contact_Id</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Screen_ErrorGeneric</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>FirstName</field>
+            <value>
+                <elementReference>varR_Contact.FirstName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LastName</field>
+            <value>
+                <elementReference>varR_Contact.LastName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Phone</field>
+            <value>
+                <elementReference>varR_Contact.Phone</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email</field>
+            <value>
+                <elementReference>varR_Contact.Email</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Birthdate</field>
+            <value>
+                <elementReference>varR_Contact.Birthdate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Is_Patient__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+
+    
+    <recordCreates>
+        <description>Creates the Case record. Status is set to Draft or Submitted based on varB_Submit. ContactId links the patient. Fault path routes to the error screen.</description>
+        <name>Create_Case</name>
+        <label>Create Intake Case</label>
+        <locationX>176</locationX>
+        <locationY>1080</locationY>
+        <connector>
+            <targetReference>Set_Case_Id</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Screen_ErrorGeneric</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>varT_ContactId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type</field>
+            <value>
+                <elementReference>varR_Case.Type</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <elementReference>varR_Case.Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>varR_Case.Description</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <elementReference>forT_CaseStatus</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+
+    <recordLookups>
+        <description>Queries Contact records matching the search criteria. Searches by LastName and/or Phone. Bulk-safe: LIMIT 50.</description>
+        <name>Search_Existing_Patients</name>
+        <label>Search Existing Patients</label>
+        <locationX>176</locationX>
+        <locationY>240</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_PatientFound</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>LastName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varT_SearchLastName</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Phone</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varT_SearchPhone</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <limit>50</limit>
+        <object>Contact</object>
+        <outputReference>varR_SearchResults</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
+        <queriedFields>Phone</queriedFields>
+        <queriedFields>Birthdate</queriedFields>
+        <queriedFields>Email</queriedFields>
+        <queriedFields>Is_Patient__c</queriedFields>
+        <sortField>LastName</sortField>
+        <sortOrder>Asc</sortOrder>
+    </recordLookups>
+
+    
+    <recordLookups>
+        <description>Reads the CaseNumber of the newly created Case for display on the confirmation screen.</description>
+        <name>Get_New_Case</name>
+        <label>Get New Case Number</label>
+        <locationX>176</locationX>
+        <locationY>1200</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Screen_Confirmation</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Screen_Confirmation</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varT_CaseId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <outputAssignments>
+            <assignToReference>varT_CaseNumber</assignToReference>
+            <field>CaseNumber</field>
+        </outputAssignments>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>CaseNumber</queriedFields>
+    </recordLookups>
+
+    
+    <screens>
+        <description>Screen 1: Intake coordinator enters patient search criteria (Last Name, Phone, or DOB) to look up an existing patient before creating a new Contact.</description>
+        <name>Screen_PatientSearch</name>
+        <label>Step 1 of 5: Search for Patient</label>
+        <locationX>176</locationX>
+        <locationY>120</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Search_Existing_Patients</targetReference>
+        </connector>
+        <fields>
+            <name>CPS_SearchInstruction</name>
+            <fieldText>&lt;p&gt;Enter one or more search criteria below to find an existing patient record before creating a new one.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>CPS_LastName</name>
+            <dataType>String</dataType>
+            <fieldText>Last Name</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <outputParameters>
+                <assignToReference>varT_SearchLastName</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <fields>
+            <name>CPS_Phone</name>
+            <dataType>String</dataType>
+            <fieldText>Phone Number</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <outputParameters>
+                <assignToReference>varT_SearchPhone</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <fields>
+            <name>CPS_DOB</name>
+            <dataType>Date</dataType>
+            <fieldText>Date of Birth</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <outputParameters>
+                <assignToReference>varD_SearchDOB</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <nextOrFinishButtonLabel>Search</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+
+    
+    <screens>
+        <description>Screen 2a: Shows search results. Coordinator selects an existing patient or clicks "Create New Patient" to start a new record.</description>
+        <name>Screen_SelectPatient</name>
+        <label>Step 2 of 5: Select or Create Patient</label>
+        <locationX>0</locationX>
+        <locationY>480</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Decision_UseExistingOrNew</targetReference>
+        </connector>
+        <fields>
+            <name>SPS_ResultsHeader</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Patient search results. Select a patient to use for this intake, or choose "Create New Patient" below.&lt;/b&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>SPS_PatientId</name>
+            <dataType>String</dataType>
+            <fieldText>Patient Contact ID (copy from search results above)</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <outputParameters>
+                <assignToReference>varT_ContactId</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <fields>
+            <name>SPS_CreateNew</name>
+            <fieldText>&lt;p&gt;Don't see the patient? Leave the dropdown blank and click Next to create a new patient record.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Next</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+
+    <screens>
+        <description>Screen 2b: Coordinator enters details for a new patient Contact record (FirstName, LastName, Phone, Email, DOB, marks as patient).</description>
+        <name>Screen_NewPatient</name>
+        <label>Step 2 of 5: New Patient Details</label>
+        <locationX>352</locationX>
+        <locationY>480</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Create_New_Contact</targetReference>
+        </connector>
+        <fields>
+            <name>SNP_FirstName</name>
+            <dataType>String</dataType>
+            <fieldText>First Name</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+            <outputParameters>
+                <assignToReference>varR_Contact.FirstName</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <fields>
+            <name>SNP_LastName</name>
+            <dataType>String</dataType>
+            <fieldText>Last Name</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+            <outputParameters>
+                <assignToReference>varR_Contact.LastName</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <fields>
+            <name>SNP_Phone</name>
+            <dataType>String</dataType>
+            <fieldText>Phone</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <outputParameters>
+                <assignToReference>varR_Contact.Phone</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <fields>
+            <name>SNP_Email</name>
+            <dataType>String</dataType>
+            <fieldText>Email</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <outputParameters>
+                <assignToReference>varR_Contact.Email</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <fields>
+            <name>SNP_DOB</name>
+            <dataType>Date</dataType>
+            <fieldText>Date of Birth</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <outputParameters>
+                <assignToReference>varR_Contact.Birthdate</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <nextOrFinishButtonLabel>Next</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+
+    
+    <screens>
+        <description>Screen 3: Coordinator enters intake case details — case type (Insurance/Counseling/Medical), priority, and description.</description>
+        <name>Screen_CaseDetails</name>
+        <label>Step 3 of 5: Intake Details</label>
+        <locationX>176</locationX>
+        <locationY>720</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Screen_SaveOrSubmit</targetReference>
+        </connector>
+        <fields>
+            <name>SCD_TypePick</name>
+            <choiceReferences>picChoice_CaseType</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Case Type</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>true</isRequired>
+            <outputParameters>
+                <assignToReference>varR_Case.Type</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <fields>
+            <name>SCD_PriorityPick</name>
+            <choiceReferences>picChoice_CasePriority</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Priority</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>true</isRequired>
+            <outputParameters>
+                <assignToReference>varR_Case.Priority</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <fields>
+            <name>SCD_Description</name>
+            <dataType>String</dataType>
+            <fieldText>Description / Reason for Visit</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
+            <outputParameters>
+                <assignToReference>varR_Case.Description</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <nextOrFinishButtonLabel>Next</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+
+    <screens>
+        <description>Screen 4: Coordinator clicks "Save Draft" to park the case as Draft, or "Submit" to finalize and route it to the queue. ADR-006 resolved draft auto-save as an explicit Save Draft button. IPOP-10.</description>
+        <name>Screen_SaveOrSubmit</name>
+        <label>Step 4 of 5: Save or Submit</label>
+        <locationX>176</locationX>
+        <locationY>840</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <backButtonLabel>Save Draft</backButtonLabel>
+        <fields>
+            <name>SSS_Instruction</name>
+            <fieldText>&lt;p&gt;Review the intake details, then select an action below and click Next.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>SSS_ActionChoice</name>
+            <choiceReferences>choice_Submit</choiceReferences>
+            <choiceReferences>choice_SaveDraft</choiceReferences>
+            <dataType>String</dataType>
+            <defaultSelectedChoiceReference>choice_Submit</defaultSelectedChoiceReference>
+            <fieldText>Action</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>true</isRequired>
+            <outputParameters>
+                <assignToReference>varT_ActionChoice</assignToReference>
+                <name>value</name>
+            </outputParameters>
+        </fields>
+        <nextOrFinishButtonLabel>Submit</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+        <connector>
+            <targetReference>Set_Submit_True</targetReference>
+        </connector>
+    </screens>
+
+    <screens>
+        <description>Screen 5: Confirmation. Displays the Case number and status. Allows coordinator to finish or navigate to the Case record.</description>
+        <name>Screen_Confirmation</name>
+        <label>Step 5 of 5: Confirmation</label>
+        <locationX>176</locationX>
+        <locationY>1320</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>SC_ConfirmMsg</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Intake recorded successfully.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Case Number: &lt;b&gt;{!varT_CaseNumber}&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Status: &lt;b&gt;{!forT_CaseStatus}&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Click Finish to return to the main screen, or navigate directly to the Case record to review details.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Finish</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+
+    
+    <screens>
+        <description>Generic error screen shown when a create/update operation fails. Displays the fault message so the coordinator can report it.</description>
+        <name>Screen_ErrorGeneric</name>
+        <label>Error — Please Contact Support</label>
+        <locationX>528</locationX>
+        <locationY>960</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>SE_ErrorMsg</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;An error occurred during the intake process.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Please contact your system administrator with the following error details:&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Close</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+
+<start>
+        <locationX>176</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Screen_PatientSearch</targetReference>
+        </connector>
+    </start>
+
+    <status>Active</status>
+
+    
+    <choices>
+        <name>choice_Submit</name>
+        <choiceText>Submit to Queue</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Submit</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>choice_SaveDraft</name>
+        <choiceText>Save as Draft (return later)</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Draft</stringValue>
+        </value>
+    </choices>
+    <variables>
+        <description>Holds the Contact record selected or created for this patient.</description>
+        <name>varR_Contact</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <description>Holds the Case record created during this intake session.</description>
+        <name>varR_Case</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Case</objectType>
+    </variables>
+    <variables>
+        <description>Search results collection from the patient look-up query.</description>
+        <name>varR_SearchResults</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <description>Text entered by the user in the patient search field (last name).</description>
+        <name>varT_SearchLastName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Phone number entered by user for patient search.</description>
+        <name>varT_SearchPhone</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Date of birth entered by user for patient search.</description>
+        <name>varD_SearchDOB</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Tracks whether the user clicked Save Draft (false) or Submit (true).</description>
+        <name>varB_Submit</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Tracks whether an existing patient was found (true) or a new Contact will be created (false).</description>
+        <name>varB_PatientFound</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>ID of the created or selected Contact, used for Case creation.</description>
+        <name>varT_ContactId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>ID of the newly created Case, displayed on the confirmation screen.</description>
+        <name>varT_CaseId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>The action chosen by the coordinator: Submit or Draft.</description>
+        <name>varT_ActionChoice</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>Submit</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Case number of the newly created case for display on the confirmation screen.</description>
+        <name>varT_CaseNumber</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+
+    
+    </Flow>

@@ -7,7 +7,7 @@
         <recipients>
             <type>owner</type>
         </recipients>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>CurrentUser</senderType>
         <template>Crestview/Crestview_Urgent_Case_Alert</template>
     </alerts>
     <alerts>
@@ -17,7 +17,7 @@
         <recipients>
             <type>owner</type>
         </recipients>
-        <senderType>OrgWideEmailAddress</senderType>
+        <senderType>CurrentUser</senderType>
         <template>Crestview/Crestview_Case_ReRoute_Notification</template>
     </alerts>
 </Workflow>

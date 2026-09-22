@@ -2,7 +2,5 @@
 <PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
     <description>Permission Set Group for Insurance Navigator persona. Bundles Insurance_Navigator_PS. Assign to staff working the Insurance Navigation queue. IPOP-7/8.</description>
     <label>Insurance Navigator</label>
-    <masterLabel>Insurance Navigator</masterLabel>
     <permissionSets>Insurance_Navigator_PS</permissionSets>
-    <status>Updated</status>
 </PermissionSetGroup>

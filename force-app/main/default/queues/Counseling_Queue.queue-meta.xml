@@ -2,7 +2,6 @@
 <Queue xmlns="http://soap.sforce.com/2006/04/metadata">
     <doesSendEmailToMembers>true</doesSendEmailToMembers>
     <email>counseling@crestviewhealth.example.com</email>
-    <label>Counseling</label>
     <name>Counseling_Queue</name>
     <queueMembers>
         <publicGroups>

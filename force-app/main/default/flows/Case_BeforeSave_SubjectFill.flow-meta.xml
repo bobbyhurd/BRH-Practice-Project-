@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>67.0</apiVersion>
-    <description>RT – Case – Subject Fill. Before-save record-triggered flow on Case (create and update). Auto-fills the Subject field with "[Patient Full Name] — [Today's Date]" when Subject is blank. Runs before record is saved so no extra DML is needed. IPOP-3.</description>
+    <description>RT – Case – Subject Fill. Before-save record-triggered flow on Case (create and update). Auto-fills Subject with [Patient Name] — [Date] when Subject is blank. IPOP-3.</description>
     <environments>Default</environments>
     <formulas>
-        <description>Builds the default subject using the contact's full name and today's date.</description>
+        <description>Default subject line combining contact name and today's date.</description>
         <name>forT_DefaultSubject</name>
         <dataType>String</dataType>
         <expression>$Record.Contact.Name &amp; " — " &amp; TEXT(TODAY())</expression>
@@ -18,10 +18,12 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordTriggerType>CreateAndUpdate</recordTriggerType>
     <start>
         <locationX>176</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Set_Subject_to_Default</targetReference>
+        </connector>
         <filterLogic>1</filterLogic>
         <filters>
             <field>Subject</field>
@@ -36,7 +38,7 @@
     </start>
     <status>Active</status>
     <assignments>
-        <description>Sets the Subject field on the in-memory record to the computed default value. No DML needed in before-save context.</description>
+        <description>Sets the Subject field on the in-memory record before save. No DML needed in before-save context.</description>
         <name>Set_Subject_to_Default</name>
         <label>Set Subject to Default</label>
         <locationX>176</locationX>

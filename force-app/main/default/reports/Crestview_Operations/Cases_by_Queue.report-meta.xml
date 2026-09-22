@@ -4,9 +4,6 @@
         <field>CASE_NUMBER</field>
     </columns>
     <columns>
-        <field>OWNER</field>
-    </columns>
-    <columns>
         <field>STATUS</field>
     </columns>
     <columns>
@@ -15,10 +12,7 @@
     <columns>
         <field>TYPE</field>
     </columns>
-    <columns>
-        <field>CREATED_DATE</field>
-    </columns>
-    <description>Groups intake cases by queue (owner) so operations leadership can see the distribution of cases across Insurance Navigation, Counseling, and Medical Response queues. IPOP-8.</description>
+    <description>Groups intake cases by queue (owner) to show distribution across Insurance Navigation, Counseling, and Medical Response queues. IPOP-8.</description>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
@@ -31,8 +25,4 @@
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
-    <timeFrameFilter>
-        <dateColumn>CREATED_DATE</dateColumn>
-        <interval>INTERVAL_CURRENT_FY</interval>
-    </timeFrameFilter>
 </Report>

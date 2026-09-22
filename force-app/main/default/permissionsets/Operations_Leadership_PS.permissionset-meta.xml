@@ -3,7 +3,6 @@
     <description>DATA – Operations – Read Only. Grants ops leadership read-only on Contact (FirstName/LastName only, no PHI), read-only on Case, and full Reports and Dashboards access. IPOP-7/8/19.</description>
     <label>Operations Leadership PS</label>
     <hasActivationRequired>false</hasActivationRequired>
-    <userLicense>Salesforce</userLicense>
     <objectPermissions>
         <allowCreate>false</allowCreate>
         <allowDelete>false</allowDelete>
@@ -66,22 +65,8 @@
         <field>Case.Urgent_Alert_Sent__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Contact.FirstName</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Contact.LastName</field>
-        <readable>true</readable>
-    </fieldPermissions>
     <userPermissions>
         <enabled>true</enabled>
         <name>RunReports</name>
-    </userPermissions>
-    <userPermissions>
-        <enabled>true</enabled>
-        <name>ViewReports</name>
     </userPermissions>
 </PermissionSet>

@@ -4,9 +4,6 @@
         <field>CASE_NUMBER</field>
     </columns>
     <columns>
-        <field>CREATED_BY</field>
-    </columns>
-    <columns>
         <field>STATUS</field>
     </columns>
     <columns>
@@ -15,14 +12,11 @@
     <columns>
         <field>TYPE</field>
     </columns>
-    <columns>
-        <field>CREATED_DATE</field>
-    </columns>
-    <description>Groups intake cases by the staff member who created them (intake coordinator) to support workload analysis and performance review. IPOP-8.</description>
+    <description>Groups intake cases by the staff member who created them for workload and performance analysis. IPOP-8.</description>
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Day</dateGranularity>
-        <field>CREATED_BY</field>
+        <field>OWNER</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
     <name>Cases by Intake Coordinator</name>
@@ -31,8 +25,4 @@
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
-    <timeFrameFilter>
-        <dateColumn>CREATED_DATE</dateColumn>
-        <interval>INTERVAL_CURRENT_FY</interval>
-    </timeFrameFilter>
 </Report>

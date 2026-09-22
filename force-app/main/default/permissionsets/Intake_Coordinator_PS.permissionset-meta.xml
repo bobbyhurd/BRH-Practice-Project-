@@ -3,7 +3,6 @@
     <description>DATA – Intake – Create/Read/Edit/Delete. Grants intake coordinators full CRUD on Contact (patient) and Case (Draft/In Progress), Screen Flow launch access, and Reports read. Grant Block_PostSubmit_Edit custom permission. IPOP-7/8.</description>
     <label>Intake Coordinator PS</label>
     <hasActivationRequired>false</hasActivationRequired>
-    <userLicense>Salesforce</userLicense>
     <objectPermissions>
         <allowCreate>true</allowCreate>
         <allowDelete>true</allowDelete>
@@ -64,36 +63,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Case.Urgent_Alert_Sent__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Contact.FirstName</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Contact.LastName</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Contact.Birthdate</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Contact.Phone</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Contact.Email</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Contact.MobilePhone</field>
         <readable>true</readable>
     </fieldPermissions>
     <customPermissions>

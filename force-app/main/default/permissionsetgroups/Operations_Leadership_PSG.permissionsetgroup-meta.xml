@@ -2,7 +2,5 @@
 <PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
     <description>Permission Set Group for Operations Leadership persona. Bundles Operations_Leadership_PS. Assign to ops managers who need read-only visibility into cases and patients, plus reports/dashboards. IPOP-7/8.</description>
     <label>Operations Leadership</label>
-    <masterLabel>Operations Leadership</masterLabel>
     <permissionSets>Operations_Leadership_PS</permissionSets>
-    <status>Updated</status>
 </PermissionSetGroup>

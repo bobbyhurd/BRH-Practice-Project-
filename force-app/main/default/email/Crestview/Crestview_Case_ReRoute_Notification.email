@@ -1,0 +1,12 @@
+A patient intake case has been re-routed to your queue.
+
+Case Number: {!Case.CaseNumber}
+Patient: {!Case.Contact.Name}
+Case Type: {!Case.Type}
+Priority: {!Case.Priority}
+Current Status: {!Case.Status}
+Description: {!Case.Description}
+
+Please log in to Salesforce to review and process this case.
+
+This is an automated message from the Crestview Community Health Patient Intake System. Do not reply to this email.

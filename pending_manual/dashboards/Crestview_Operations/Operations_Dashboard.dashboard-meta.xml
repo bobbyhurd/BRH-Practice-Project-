@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dashboard xmlns="http://soap.sforce.com/2006/04/metadata">
+    <backgroundEndColor>#FFFFFF</backgroundEndColor>
+    <backgroundFadeDirection>Diagonal</backgroundFadeDirection>
+    <backgroundStartColor>#FFFFFF</backgroundStartColor>
+    <description>Crestview Patient Intake operations overview. Wire 4 report components in the UI post-deploy. IPOP-8.</description>
+    <leftSection>
+        <columnSize>Wide</columnSize>
+        <components>
+            <autoselectColumnsFromReport>false</autoselectColumnsFromReport>
+            <componentType>Donut</componentType>
+            <displayUnits>Integer</displayUnits>
+            <chartAxisRange>Auto</chartAxisRange>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <expandOthers>false</expandOthers>
+            <header>Cases by Queue</header>
+            <legendPosition>Right</legendPosition>
+            <report>Crestview_Operations/Cases_by_Queue</report>
+            <showPercentage>true</showPercentage>
+            <showTotal>true</showTotal>
+            <showValues>false</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Cases by Queue</title>
+        </components>
+        <components>
+            <autoselectColumnsFromReport>false</autoselectColumnsFromReport>
+            <componentType>Bar</componentType>
+            <displayUnits>Integer</displayUnits>
+            <chartAxisRange>Auto</chartAxisRange>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <expandOthers>false</expandOthers>
+            <header>Cases by Priority</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Crestview_Operations/Cases_by_Priority</report>
+            <showPercentage>false</showPercentage>
+            <showTotal>true</showTotal>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Cases by Priority</title>
+        </components>
+    </leftSection>
+    <rightSection>
+        <columnSize>Medium</columnSize>
+        <components>
+            <autoselectColumnsFromReport>false</autoselectColumnsFromReport>
+            <componentType>Bar</componentType>
+            <displayUnits>Integer</displayUnits>
+            <chartAxisRange>Auto</chartAxisRange>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <expandOthers>false</expandOthers>
+            <header>Cases by Intake Coordinator</header>
+            <legendPosition>Bottom</legendPosition>
+            <report>Crestview_Operations/Cases_by_Intake_Coordinator</report>
+            <showPercentage>false</showPercentage>
+            <showTotal>true</showTotal>
+            <showValues>true</showValues>
+            <sortBy>RowLabelDescending</sortBy>
+            <title>Cases by Coordinator</title>
+        </components>
+        <components>
+            <autoselectColumnsFromReport>false</autoselectColumnsFromReport>
+            <componentType>Metric</componentType>
+            <displayUnits>Integer</displayUnits>
+            <chartAxisRange>Auto</chartAxisRange>
+            <drillEnabled>false</drillEnabled>
+            <drillToDetailEnabled>false</drillToDetailEnabled>
+            <enableHover>true</enableHover>
+            <expandOthers>false</expandOthers>
+            <header>Urgent Cases (Last 90 Days)</header>
+            <report>Crestview_Operations/Urgent_Cases_Response_Time</report>
+            <showPercentage>false</showPercentage>
+            <showTotal>true</showTotal>
+            <showValues>true</showValues>
+            <sortBy>RowLabelAscending</sortBy>
+            <title>Urgent Cases</title>
+        </components>
+    </rightSection>
+    <runningUser>bobby.hurd.3b82b5f7ba4b@agentforce.com</runningUser>
+    <textColor>#000000</textColor>
+    <title>Operations Dashboard</title>
+    <titleColor>#000000</titleColor>
+    <titleSize>12</titleSize>
+</Dashboard>

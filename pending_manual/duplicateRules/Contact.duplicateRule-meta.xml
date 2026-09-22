@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DuplicateRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOnInsert>Allow</actionOnInsert>
+    <actionOnUpdate>Allow</actionOnUpdate>
+    <description>Alert-mode duplicate rule for Crestview patient records. OQ-2 decision: allow save with warning. IPOP-13.</description>
+    <duplicateRuleMatchRules>
+        <matchingRule>Contact.Patient_Duplicate_Match</matchingRule>
+    </duplicateRuleMatchRules>
+    <isActive>true</isActive>
+    <label>Patient Duplicate Block</label>
+    <operationsOnInsert>Alert</operationsOnInsert>
+    <operationsOnUpdate>Alert</operationsOnUpdate>
+    <securityOption>EnforceSharingRules</securityOption>
+    <sortOrder>1</sortOrder>
+</DuplicateRule>

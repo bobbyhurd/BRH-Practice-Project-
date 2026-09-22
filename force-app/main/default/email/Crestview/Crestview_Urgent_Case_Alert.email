@@ -1,0 +1,12 @@
+An urgent priority intake case has been submitted and requires your immediate attention.
+
+Case Number: {!Case.CaseNumber}
+Patient: {!Case.Contact.Name}
+Case Type: {!Case.Type}
+Priority: {!Case.Priority}
+Submitted: {!Case.CreatedDate}
+Description: {!Case.Description}
+
+Please log in to Salesforce and review this case as soon as possible.
+
+This is an automated message from the Crestview Community Health Patient Intake System. Do not reply to this email.

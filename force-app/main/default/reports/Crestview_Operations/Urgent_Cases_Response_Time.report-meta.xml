@@ -4,25 +4,15 @@
         <field>CASE_NUMBER</field>
     </columns>
     <columns>
-        <field>PRIORITY</field>
-    </columns>
-    <columns>
         <field>OWNER</field>
     </columns>
     <columns>
         <field>STATUS</field>
     </columns>
     <columns>
-        <field>CREATED_DATE</field>
-    </columns>
-    <columns>
         <field>CLOSED_DATE</field>
     </columns>
-    <columns>
-        <field>DURATION</field>
-        <aggregateTypes>AVG</aggregateTypes>
-    </columns>
-    <description>Filters to Urgent priority cases and shows the time-to-close (days) to support SLA monitoring. Used on the Operations Dashboard. IPOP-8/20.</description>
+    <description>Filters to Urgent priority cases to support SLA monitoring and response time reporting. IPOP-8/20.</description>
     <filter>
         <criteriaItems>
             <column>PRIORITY</column>
@@ -34,7 +24,7 @@
     <format>Summary</format>
     <groupingsDown>
         <dateGranularity>Month</dateGranularity>
-        <field>CREATED_DATE</field>
+        <field>PRIORITY</field>
         <sortOrder>Desc</sortOrder>
     </groupingsDown>
     <name>Urgent Cases — Response Time</name>
@@ -43,8 +33,4 @@
     <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
-    <timeFrameFilter>
-        <dateColumn>CREATED_DATE</dateColumn>
-        <interval>INTERVAL_LAST_90_DAYS</interval>
-    </timeFrameFilter>
 </Report>
