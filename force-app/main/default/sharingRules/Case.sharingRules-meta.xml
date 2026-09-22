@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Case_Cross_Team_Read</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Shares non-Draft Cases with All Internal Users so follow-up teams can see Cases routed to other queues. Read-only. ADR-005. IPOP-5.</description>
+        <label>Case Cross Team Read</label>
+        <sharedTo>
+            <allInternalUsers></allInternalUsers>
+        </sharedTo>
+        <criteriaItems>
+            <field>Status</field>
+            <operation>notEqual</operation>
+            <value>Draft</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

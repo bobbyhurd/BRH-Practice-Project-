@@ -69,6 +69,10 @@
         <enabled>true</enabled>
         <name>Block_PostSubmit_Edit</name>
     </customPermissions>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>Contact_Screen_PatientSearch</flow>
+    </flowAccesses>
     <userPermissions>
         <enabled>true</enabled>
         <name>RunReports</name>
