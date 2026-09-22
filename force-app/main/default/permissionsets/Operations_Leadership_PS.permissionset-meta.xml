@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>DATA – Operations – Read Only. Grants ops leadership read-only on Contact (FirstName/LastName only, no PHI), read-only on Case, and full Reports and Dashboards access. IPOP-7/8/19.</description>
+    <description>DATA – Operations – Read Only. Grants ops leadership read-only on Contact (FirstName/LastName ONLY — Birthdate/Phone/Email/MobilePhone BLOCKED per HIPAA PHI lockdown IPOP-19), read-only on Case, and full Reports and Dashboards access. IPOP-7/8/19.</description>
     <label>Operations Leadership PS</label>
     <hasActivationRequired>false</hasActivationRequired>
     <objectPermissions>
